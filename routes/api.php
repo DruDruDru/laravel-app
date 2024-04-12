@@ -3,6 +3,7 @@
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Models\Employee;
+use App\Http\Controllers\EmployeeController;
 
 /*
 |--------------------------------------------------------------------------
@@ -15,11 +16,15 @@ use App\Models\Employee;
 |
 */
 
-Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
-    return $request->user();
+//Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
+//    return $request->user();
+//});
+
+Route::prefix("employee")->group(function () {
+    Route::get('', [EmployeeController::class, 'list']);
+    Route::post('', [EmployeeController::class, 'create']);
+    Route::delete('{employee_id}', [EmployeeController::class, 'destroy']);
+    Route::put('{employee_id}', [EmployeeController::class, 'update']);
 });
 
-Route::get("/employee", function () {
-    return Employee::all();
-});
 
