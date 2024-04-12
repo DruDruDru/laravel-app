@@ -27,6 +27,7 @@ return new class extends Migration
      */
     public function down(): void
     {
+        DB::table("roles")->truncate();
         Schema::dropIfExists('roles');
     }
 };

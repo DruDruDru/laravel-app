@@ -22,7 +22,7 @@ return new class extends Migration
             $table->string("login", 100)->unique();
             $table->date("hire_date");
             $table->date("termination_date")->nullable();
-            $table->decimal("salary", 10, 2);
+            $table->decimal("salary", 10, 2)->unsigned();
         });
     }
 
