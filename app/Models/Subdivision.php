@@ -5,20 +5,21 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class Employee extends Model
+class Subdivision extends Model
 {
     use HasFactory;
-
-    protected $fillable = [
-        'firstname', 'lastname', 'patronymic',
-        'birth_date', 'hire_date', 'termination_date',
-        'gender', 'login', 'salary',
-    ];
 
     public function positions()
     {
         return $this->belongsToMany(Position::class);
     }
 
+    protected $fillable = [
+        'subdivision_code',
+        'name',
+        'description'
+    ];
+
+    protected $primaryKey = "subdivision_code";
     public $timestamps = false;
 }

@@ -11,12 +11,12 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('positions_employees', function (Blueprint $table) {
+        Schema::create('position_subdivision', function (Blueprint $table) {
             $table->id();
+            $table->integer("subdivision_code");
             $table->integer("position_id");
-            $table->integer("employee_id");
-            $table->foreign("position_id")->references("id")->on("positions");
-            $table->foreign("employee_id")->references("id")->on("employees");
+            $table->foreign("position_id")->references("id")->on("positions")->cascadeOnDelete();
+            $table->foreign("subdivision_code")->references("subdivision_code")->on("subdivisions")->cascadeOnDelete();
         });
     }
 
@@ -25,6 +25,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('positions_employees');
+        Schema::dropIfExists('position_subdivision');
     }
 };

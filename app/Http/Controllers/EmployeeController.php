@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Employee;
+use App\Models\Position;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Http\Response;
@@ -11,7 +12,7 @@ class EmployeeController extends Controller
 {
     public function list()
     {
-        return Employee::all();
+        return Employee::with("positions")->get();
     }
 
     public function create(Request $request)
@@ -25,7 +26,9 @@ class EmployeeController extends Controller
             "login" => "required|string|max:100|unique:employees",
             "hire_date" => "required|date",
             "termination_date" => "date",
-            "salary" => "decimal:2"
+            "salary" => "decimal:2",
+            "positions" => "array",
+            "positions.*" => "in:". implode(',', Position::pluck("id")->toArray())
         ]);
 
         if ($validated->fails()) {
@@ -37,8 +40,13 @@ class EmployeeController extends Controller
                 ]],
                 Response::HTTP_UNPROCESSABLE_ENTITY);
         }
+        $employee = Employee::create($validated->getData());
+        $employee->positions()->attach($validated->getData()["positions"]);
 
-        return Employee::create($validated->getData());
+        return response()->json(
+            ["data" => ["message" => "Employee is added"]],
+            Response::HTTP_CREATED
+        );
     }
 
     public function destroy(Request $request)
@@ -81,7 +89,9 @@ class EmployeeController extends Controller
             "login" => "required|string|max:100|unique:employees,login,".$employee_id,
             "hire_date" => "required|date",
             "termination_date" => "date",
-            "salary" => "decimal:2"
+            "salary" => "decimal:2",
+            "positions" => "array",
+            "positions.*" => "in:". implode(',', Position::pluck("id")->toArray())
         ]);
 
         if ($validated->fails()) {
@@ -95,6 +105,7 @@ class EmployeeController extends Controller
         }
 
         $employee->update($validated->getData());
+        $employee->positions()->attach($validated->getData()["positions"]);
 
         return response()->json(["data" => ["message" => "Employee data is updated"]]);
     }
