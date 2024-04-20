@@ -2,18 +2,24 @@
 
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\EmployeeController;
+use App\Http\Controllers\AuthController;
+use App\Http\Controllers\UserController;
 
-//Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
-//    return $request->user();
-//});
-
-Route::prefix("employee")->group(function () {
-    Route::get('', [EmployeeController::class, 'list']);
-    Route::post('', [EmployeeController::class, 'create']);
-    Route::delete('{employee_id}', [EmployeeController::class, 'destroy']);
-    Route::put('{employee_id}', [EmployeeController::class, 'update']);
+Route::group([
+    'prefix' => 'employee',
+    'controller' => EmployeeController::class,
+    'middleware' => ['jwt.auth', 'role:moderator,admin']
+], function () {
+    Route::get('', 'list');
+    Route::post('', 'create');
+    Route::delete('{employee_id}', 'destroy');
+    Route::put('{employee_id}', 'update');
 });
 
-
-
-
+Route::group([
+    'middleware' => 'api'
+], function () {
+    Route::post('login', [AuthController::class, 'login']);
+    Route::post('signup', [UserController::class, 'signup']);
+    Route::post('logout', [AuthController::class, 'logout']);
+});
