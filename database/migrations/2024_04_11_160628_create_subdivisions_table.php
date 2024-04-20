@@ -12,7 +12,7 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('subdivisions', function (Blueprint $table) {
-            $table->integer("subdivision_code")->primary();
+            $table->integer("subdivision_code")->primary("subdivision_code");
             $table->string("name")->unique();
             $table->text("description")->nullable();
         });

@@ -33,12 +33,9 @@ class User extends Authenticatable implements JWTSubject
         'password',
     ];
 
-    public function hasRole(string|array $role)
+    public function hasRole(array $role)
     {
-        if (gettype($role) === "array") {
-            return in_array($this->role, $role);
-        }
-        return $this->role === $role;
+        return in_array($this->role, $role);
     }
 
     /**
