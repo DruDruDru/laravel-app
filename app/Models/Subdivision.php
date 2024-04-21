@@ -26,5 +26,6 @@ class Subdivision extends Model
     ];
 
     protected $primaryKey = "subdivision_code";
+    public $incrementing = false;
     public $timestamps = false;
 }

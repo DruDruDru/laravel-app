@@ -40,6 +40,9 @@ Route::group([
     'middleware' => ['auth', 'role:moderator,admin']
 ], function () {
     Route::get('', 'list');
+    Route::post('', 'create');
+    Route::delete('{subdivision_code}', 'destroy');
+    Route::put('{subdivision_code}', 'update');
 });
 
 
