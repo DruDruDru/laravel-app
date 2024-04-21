@@ -18,7 +18,10 @@ class CheckRole
     {
         if (!Auth::user()->hasRole($role)) {
             return response()->json(
-                ["message" => "Forbidden for you"],
+                [
+                    "code" => 403,
+                    "message" => "Forbidden for you"
+                ],
                 403
             );
         }

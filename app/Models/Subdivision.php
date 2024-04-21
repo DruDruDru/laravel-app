@@ -11,7 +11,12 @@ class Subdivision extends Model
 
     public function positions()
     {
-        return $this->belongsToMany(Position::class);
+        return $this->belongsToMany(
+            Position::class,
+            "position_subdivision",
+            "subdivision_code",
+            "position_id"
+        );
     }
 
     protected $fillable = [

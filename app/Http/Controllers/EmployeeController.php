@@ -41,7 +41,8 @@ class EmployeeController extends Controller
                 Response::HTTP_UNPROCESSABLE_ENTITY);
         }
         $employee = Employee::create($validated->getData());
-        $employee->positions()->attach($validated->getData()["positions"]);
+        $employee->positions()
+            ->attach($validated->getData()["positions"] ?? []);
 
         return response()->json(
             ["data" => ["message" => "Employee is added"]],
@@ -55,14 +56,13 @@ class EmployeeController extends Controller
             return response()->json(
                 ["data" => ["message" => "Employee is removed"]],
                 Response::HTTP_OK);
-        } else {
-            return response()->json(
-                ["error" => [
-                    "code" => 404,
-                    "message" => "Not found"
-                ]], Response::HTTP_NOT_FOUND
-            );
         }
+        return response()->json(
+            ["error" => [
+                "code" => 404,
+                "message" => "Not found"
+            ]], Response::HTTP_NOT_FOUND
+        );
     }
 
     public function update(Request $request)
@@ -105,7 +105,10 @@ class EmployeeController extends Controller
         }
 
         $employee->update($validated->getData());
-        $employee->positions()->attach($validated->getData()["positions"]);
+        $employee->positions()
+            ->detach(Position::pluck("id")->toArray() ?? []);
+        $employee->positions()
+            ->attach($validated->getData()["positions"] ?? []);
 
         return response()->json(["data" => ["message" => "Employee data is updated"]]);
     }

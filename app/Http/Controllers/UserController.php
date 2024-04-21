@@ -38,7 +38,7 @@ class UserController extends Controller
         $token = auth()->attempt($userData);
 
         return response()->json(
-            ["data" => ["message" => "User is registered", "token" => $token]],
+            ["data" => ["message" => "User is registered"]],
             Response::HTTP_CREATED
         );
     }
