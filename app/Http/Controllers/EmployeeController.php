@@ -2,6 +2,8 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Filters\EmployeeFilter;
+use App\Http\Resources\EmployeeResource;
 use App\Models\Employee;
 use App\Models\Position;
 use Illuminate\Http\Request;
@@ -13,7 +15,8 @@ class EmployeeController extends Controller
 {
     public function list()
     {
-        return Employee::with("positions")->get();
+        $employees = Employee::with("positions")->get();
+        return EmployeeResource::collection($employees);
     }
 
     public function create(Request $request)
@@ -131,6 +134,10 @@ class EmployeeController extends Controller
 
     public function filter(Request $request)
     {
+        $params = $request->all();
 
+        $filter = app()->make(EmployeeFilter::class, ['queryParams' => array_filter($params)]);
+        $employee = Employee::with('positions')->filter($filter)->get();
+        return EmployeeResource::collection($employee);
     }
 }
