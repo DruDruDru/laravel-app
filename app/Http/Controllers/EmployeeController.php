@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Employee;
 use App\Models\Position;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Http\Response;
 
@@ -111,5 +112,25 @@ class EmployeeController extends Controller
             ->attach($validated->getData()["positions"] ?? []);
 
         return response()->json(["data" => ["message" => "Employee data is updated"]]);
+    }
+
+    public function search(Request $request)
+    {
+        $query = $request->query('q');
+
+        $employees = Employee::with('positions');
+
+        $employees = $employees->where('id', 'like', '%' . $query . '%')
+                            ->orWhere('firstname', 'like', '%' . $query . '%')
+                            ->orWhere('lastname', 'like', '%' . $query . '%')
+                            ->orWhere('patronymic', 'like', '%' . $query . '%')
+                            ->orWhere('login', 'like', '%' . $query . '%');
+
+        return $employees->get();
+    }
+
+    public function filter(Request $request)
+    {
+
     }
 }

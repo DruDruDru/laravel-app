@@ -3,7 +3,6 @@
 namespace App\Http\Controllers;
 
 use App\Models\Position;
-use App\Models\Subdivision;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
 
@@ -11,7 +10,7 @@ class PositionController extends Controller
 {
     public function list()
     {
-        return Position::with("subdivisions")->get();
+        return Position::all();
     }
 
     public function create(Request $request)
@@ -19,8 +18,6 @@ class PositionController extends Controller
         $validated = Validator::make($request->all(), [
             "name" => "required|string|max:100|unique:positions",
             "description" => "string",
-            "subdivisions" => "array",
-            "subdivisions.*" => "in:" . implode(',', Subdivision::pluck("subdivision_code")->toArray())
         ]);
 
         if ($validated->fails()) {
@@ -33,12 +30,8 @@ class PositionController extends Controller
                 422
             );
         }
-        $position = Position::create([
-            "name" => $validated->getData()["name"],
-            "description" => $validated->getData()["description"]
-        ]);
-        $position->subdivisions()
-            ->attach($validated->getData()["subdivisions"] ?? []);
+
+        Position::create($validated->getData());
 
         return response()->json(
             ["data" => ["message" => "Position is added"]],
@@ -80,8 +73,6 @@ class PositionController extends Controller
         $validated = Validator::make($request->all(), [
             "name" => "required|string|max:100|unique:positions,name,".$position_id,
             "description" => "string",
-            "subdivisions" => "array",
-            "subdivisions.*" => "in:" . implode(',', Subdivision::pluck("subdivision_code")->toArray())
         ]);
 
         if ($validated->fails()) {
@@ -95,11 +86,6 @@ class PositionController extends Controller
         }
 
         $position->update($validated->getData());
-
-        $position->subdivisions()
-            ->detach(Subdivision::pluck("subdivision_code")->toArray() ?? []);
-        $position->subdivisions()
-            ->attach($validated->getData()["subdivisions"] ?? []);
 
         return response()->json(["data" => ["message" => "Position data is updated"]]);
     }

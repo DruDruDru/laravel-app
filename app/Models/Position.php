@@ -14,16 +14,6 @@ class Position extends Model
         return $this->belongsToMany(Employee::class);
     }
 
-    public function subdivisions()
-    {
-        return $this->belongsToMany(
-            Subdivision::class,
-            "position_subdivision",
-            "position_id",
-            "subdivision_code"
-        );
-    }
-
     protected $fillable = [
         'name',
         'description'

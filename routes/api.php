@@ -5,7 +5,6 @@ use App\Http\Controllers\EmployeeController;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\PositionController;
-use App\Http\Controllers\SubdivisionController;
 
 // Маршруты employee
 Route::group([
@@ -17,6 +16,8 @@ Route::group([
     Route::post('', 'create');
     Route::delete('{employee_id}', 'destroy');
     Route::put('{employee_id}', 'update');
+    Route::get('search', 'search');
+    Route::get('filter', 'filter');
 });
 
 
@@ -30,19 +31,6 @@ Route::group([
     Route::post('', 'create');
     Route::delete('{position_id}', 'destroy');
     Route::put('{position_id}', 'update');
-});
-
-
-// Маршруты subdivision
-Route::group([
-    'prefix' => 'subdivision',
-    'controller' => SubdivisionController::class,
-    'middleware' => ['auth', 'role:moderator,admin']
-], function () {
-    Route::get('', 'list');
-    Route::post('', 'create');
-    Route::delete('{subdivision_code}', 'destroy');
-    Route::put('{subdivision_code}', 'update');
 });
 
 
