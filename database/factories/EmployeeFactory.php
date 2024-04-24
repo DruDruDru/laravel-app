@@ -25,7 +25,7 @@ class EmployeeFactory extends Factory
             "login" => fake()->userName(),
             "hire_date" => fake()->date(),
             "termination_date" => fake()->date(),
-            "salary" => fake()->randomFloat(2),
+            "salary" => fake()->randomFloat(2, 500, 100000),
         ];
     }
 }

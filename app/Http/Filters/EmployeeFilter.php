@@ -3,7 +3,7 @@
 namespace App\Http\Filters;
 
 use Carbon\Carbon;
-use Carbon\Exceptions\Exception;
+use Carbon\Exceptions\InvalidFormatException;
 use Illuminate\Database\Eloquent\Builder;
 
 class EmployeeFilter extends AbstractFilter
@@ -55,32 +55,42 @@ class EmployeeFilter extends AbstractFilter
     {
         try {
             $builder->where('birth_date', '<=', Carbon::parse($value));
-        } catch (Exception) {}
+        } catch (InvalidFormatException) {}
     }
 
     public function minBirthDate(Builder $builder, $value)
     {
-        $builder->where('birth_date', '>=', $value);
+        try {
+            $builder->where('birth_date', '>=', Carbon::parse($value));
+        } catch (InvalidFormatException) {}
     }
 
     public function maxHireDate(Builder $builder, $value)
     {
-        $builder->where('hire_date', '<=', $value);
+        try {
+            $builder->where('hire_date', '<=', Carbon::parse($value));
+        } catch (InvalidFormatException) {}
     }
 
     public function minHireDate(Builder $builder, $value)
     {
-        $builder->where('hire_date', '>=', $value);
+        try {
+            $builder->where('hire_date', '>=', Carbon::parse($value));
+        } catch (InvalidFormatException) {}
     }
 
     public function maxTerminationDate(Builder $builder, $value)
     {
-        $builder->where('termination_date', '<=', $value);
+        try {
+            $builder->where('termination_date', '<=', Carbon::parse($value));
+        } catch (InvalidFormatException) {}
     }
 
     public function minTerminationDate(Builder $builder, $value)
     {
-        $builder->where('termination_date', '>=', $value);
+        try {
+            $builder->where('termination_date', '>=', Carbon::parse($value));
+        } catch (InvalidFormatException) {}
     }
 
     public function position(Builder $builder, $value)

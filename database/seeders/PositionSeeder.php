@@ -18,5 +18,16 @@ class PositionSeeder extends Seeder
         Position::create(["name" => "Sysadmin", "description" => "Service PC's"]);
         Position::create(["name" => "Analytic", "description" => "Creates a plan"]);
         Position::create(["name" => "Engineer", "description" => "Technical part"]);
+
+        Position::where('name', 'Programmer')
+            ->first()->employees()->attach([1, 2, 3, 4, 5]);
+        Position::where('name', 'Tester')
+            ->first()->employees()->attach([5, 6]);
+        Position::where('name', 'Sysadmin')
+            ->first()->employees()->attach([5, 6, 7]);
+        Position::where('name', 'Analytic')
+            ->first()->employees()->attach([8]);
+        Position::where('name', 'Engineer')
+            ->first()->employees()->attach([9, 10]);
     }
 }
