@@ -15,11 +15,11 @@ class EmployeeController extends Controller
 {
     public function list(Request $request)
     {
-        if ($request["page"]) {
-            return Employee::with("positions")->paginate(10);
+        $employees = Employee::with("positions");
+        if ($request->has("page")) {
+            return EmployeeResource::collection($employees->paginate(10));
         } else {
-            $employees = Employee::with("positions")->get();
-            return EmployeeResource::collection($employees);
+            return EmployeeResource::collection($employees->get());
         }
     }
 
@@ -133,7 +133,11 @@ class EmployeeController extends Controller
                             ->orWhere('patronymic', 'like', '%' . $query . '%')
                             ->orWhere('login', 'like', '%' . $query . '%');
 
-        return $employees->get();
+        if ($request->has("page")) {
+            return EmployeeResource::collection($employees->paginate(10));
+        } else {
+            return EmployeeResource::collection($employees->get());
+        }
     }
 
     public function filter(Request $request)
@@ -141,7 +145,9 @@ class EmployeeController extends Controller
         $params = $request->all();
 
         $filter = app()->make(EmployeeFilter::class, ['queryParams' => array_filter($params)]);
-        $employee = Employee::with('positions')->filter($filter)->get();
-        return EmployeeResource::collection($employee);
+        $employees = Employee::with('positions')->filter($filter);
+
+
+        return EmployeeResource::collection($employees->get());
     }
 }
