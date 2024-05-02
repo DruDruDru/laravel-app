@@ -8,9 +8,13 @@ use Illuminate\Support\Facades\Validator;
 
 class PositionController extends Controller
 {
-    public function list()
+    public function list(Request $request)
     {
-        return Position::all();
+        if ($request["page"]) {
+            return Position::paginate(5);
+        } else {
+            return Position::all();
+        }
     }
 
     public function create(Request $request)

@@ -13,10 +13,14 @@ use Illuminate\Http\Response;
 
 class EmployeeController extends Controller
 {
-    public function list()
+    public function list(Request $request)
     {
-        $employees = Employee::with("positions")->get();
-        return EmployeeResource::collection($employees);
+        if ($request["page"]) {
+            return Employee::with("positions")->paginate(10);
+        } else {
+            $employees = Employee::with("positions")->get();
+            return EmployeeResource::collection($employees);
+        }
     }
 
     public function create(Request $request)
