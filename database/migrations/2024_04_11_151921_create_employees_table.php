@@ -19,7 +19,7 @@ return new class extends Migration
             $table->date("birth_date");
             $table->string("gender");
             $table->foreign("gender")->references("gender")->on("genders")->nullOnDelete();
-            $table->string("login", 100)->unique();
+            $table->string("login", 255)->unique();
             $table->date("hire_date");
             $table->date("termination_date")->nullable();
             $table->decimal("salary", 10, 2)->unsigned();

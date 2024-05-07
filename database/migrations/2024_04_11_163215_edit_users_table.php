@@ -14,7 +14,7 @@ return new class extends Migration
         Schema::table('users', function (Blueprint $table) {
             $table->renameColumn("name", "login");
             $table->dropColumn(["email", "email_verified_at", "created_at", "updated_at", "remember_token"]);
-            $table->addColumn("string", "role");
+            $table->string("role", 50);
             $table->foreign("role")->references("role")->on("roles")->onDelete('cascade');
         });
     }
@@ -24,14 +24,15 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::table('users', function (Blueprint $table) {
-            $table->renameColumn("login", "name");
-            $table->addColumn("string", "email");
-            $table->addColumn("timestamp", "email_verified_at");
-            $table->addColumn("timestamp", "created_at");
-            $table->addColumn("timestamp", "updated_at");
-            $table->addColumn("string", "remember_token");
-            $table->dropColumn("role");
+        Schema::dropIfExists('users');
+        Schema::create('users', function (Blueprint $table) {
+            $table->id();
+            $table->string('name');
+            $table->string('email')->unique();
+            $table->timestamp('email_verified_at')->nullable();
+            $table->string('password');
+            $table->rememberToken();
+            $table->timestamps();
         });
     }
 };
