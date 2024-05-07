@@ -17,7 +17,7 @@ class EmployeeController extends Controller
     {
         $employees = Employee::with("positions");
         if ($request->has("page")) {
-            return EmployeeResource::collection($employees->paginate(10));
+            return EmployeeResource::collection($employees->simplePaginate(10));
         } else {
             return EmployeeResource::collection($employees->get());
         }
@@ -134,7 +134,7 @@ class EmployeeController extends Controller
                             ->orWhere('login', 'like', '%' . $query . '%');
 
         if ($request->has("page")) {
-            return EmployeeResource::collection($employees->paginate(10));
+            return EmployeeResource::collection($employees->simplePaginate(10));
         } else {
             return EmployeeResource::collection($employees->get());
         }
@@ -148,6 +148,10 @@ class EmployeeController extends Controller
         $employees = Employee::with('positions')->filter($filter);
 
 
-        return EmployeeResource::collection($employees->get());
+        if ($request->has("page")) {
+            return EmployeeResource::collection($employees->simplePaginate(10));
+        } else {
+            return EmployeeResource::collection($employees->get());
+        }
     }
 }

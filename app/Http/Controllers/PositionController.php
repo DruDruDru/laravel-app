@@ -11,7 +11,7 @@ class PositionController extends Controller
     public function list(Request $request)
     {
         if ($request->has("page")) {
-            return Position::paginate(5);
+            return Position::simplePaginate(5);
         } else {
             return Position::all();
         }
