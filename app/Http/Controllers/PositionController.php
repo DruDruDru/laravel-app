@@ -6,7 +6,7 @@ use App\Models\Position;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
 
-class PositionController extends Controller
+class   PositionController extends Controller
 {
     public function list(Request $request)
     {
