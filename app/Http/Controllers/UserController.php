@@ -13,7 +13,7 @@ class UserController extends Controller
     {
         $validated = Validator::make($request->all(), [
             "login" => "required|string|max:255|unique:users",
-            "password" => "required|string|max:255"
+            "password" => "required|max:255"
         ]);
 
         if ($validated->fails()) {
@@ -34,8 +34,6 @@ class UserController extends Controller
             "password" => bcrypt($userData["password"]),
             "role" => "moderator"
         ]);
-
-        $token = auth()->attempt($userData);
 
         return response()->json(
             ["data" => ["message" => "User is registered"]],

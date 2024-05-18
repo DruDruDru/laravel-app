@@ -28,8 +28,8 @@ class AuthController extends Controller
         $credentials = request(['login', 'password']);
 
         $validated = Validator::make($credentials, [
-            "login" => "required|max:255",
-            "password" => "required"
+            "login" => "required|string|max:255",
+            "password" => "required|max:255"
         ]);
 
         if ($validated->fails()) {
